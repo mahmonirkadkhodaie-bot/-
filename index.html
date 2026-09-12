@@ -15,20 +15,20 @@
     </style>
   </head>
   <body>
-    <!-- لایه تعاملی برای گرفتن اجازه پخش از مرورگر -->
     <div id="tap-screen">برای شروع، روی صفحه ضربه بزنید</div>
 
     <a-scene mindar-image="imageTargetSrc: targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       
       <a-assets>
-        <!-- حذف crossorigin برای جلوگیری از سیاهی تصویر -->
-        <video id="bear-video" src="video.mp4" loop playsinline webkit-playsinline muted preload="auto"></video>
+        <!-- ویدیوی تست استاندارد جایگزین شد -->
+        <video id="bear-video" src="https://cdn.aframe.io/videos/bunny.mp4" crossorigin="anonymous" loop playsinline webkit-playsinline muted preload="auto"></video>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-video src="#bear-video" width="1" height="1.4" position="0 0 0" rotation="0 0 0"></a-video>
+        <!-- استفاده از plane به جای video برای پایداری بافت گرافیکی -->
+        <a-plane src="#bear-video" width="1" height="1.4" position="0 0 0" rotation="0 0 0"></a-plane>
       </a-entity>
       
     </a-scene>
@@ -38,11 +38,10 @@
       const targetEntity = document.querySelector('[mindar-image-target]');
       const tapScreen = document.querySelector('#tap-screen');
 
-      // باز کردن قفل ویدیوی مرورگر با اولین لمس
       tapScreen.addEventListener('click', () => {
         tapScreen.style.display = 'none';
         video.play();
-        video.pause(); // ویدیو آماده پخش می‌شود اما منتظر دیدن جعبه می‌ماند
+        video.pause(); 
       });
       
       targetEntity.addEventListener("targetFound", event => {
