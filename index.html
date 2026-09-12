@@ -2,20 +2,56 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AR Packaging - Final Core Test</title>
+    <title>AR Pediatric Packaging</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      #tap-screen {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85); z-index: 999;
+        display: flex; justify-content: center; align-items: center;
+        color: white; font-family: Tahoma, sans-serif; font-size: 18px; text-align: center;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
+    <!-- دکمه تعاملی برای دریافت مجوز پخش از مرورگر -->
+    <div id="tap-screen">برای شروع راهنمای دارو، روی صفحه ضربه بزنید</div>
+
     <a-scene mindar-image="imageTargetSrc: targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       
+      <a-assets>
+        <video id="bear-video" src="video.mp4" loop playsinline webkit-playsinline preload="auto"></video>
+      </a-assets>
+
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- تست خالص: فقط یک صفحه آبی بدون نیاز به فایل خارجی -->
-        <a-plane color="blue" opacity="0.8" width="1" height="1.4" position="0 0 0" rotation="0 0 0"></a-plane>
+        <a-video src="#bear-video" width="1" height="1.4" position="0 0 0" rotation="0 0 0"></a-video>
       </a-entity>
       
     </a-scene>
+
+    <script>
+      const video = document.querySelector("#bear-video");
+      const targetEntity = document.querySelector('[mindar-image-target]');
+      const tapScreen = document.querySelector('#tap-screen');
+
+      // باز کردن قفلِ موتور گرافیکی موبایل با اولین لمس
+      tapScreen.addEventListener('click', () => {
+        tapScreen.style.display = 'none';
+        video.play();
+        video.pause(); 
+      });
+      
+      targetEntity.addEventListener("targetFound", event => {
+        video.play();
+      });
+      
+      targetEntity.addEventListener("targetLost", event => {
+        video.pause();
+      });
+    </script>
   </body>
 </html>
