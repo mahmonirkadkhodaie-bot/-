@@ -2,18 +2,36 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AR Packaging - Bear</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
-    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene mindar-image="imageTargetSrc: ./target.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       
+      <a-assets>
+        <video id="bear-video" src="./video.mp4" loop crossorigin="anonymous" playsinline webkit-playsinline muted preload="auto"></video>
+      </a-assets>
+
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-plane color="red" opacity="0.8" position="0 0 0" height="1.4" width="1" rotation="0 0 0"></a-plane>
+        <a-video src="#bear-video" width="1" height="1.4" position="0 0 0" rotation="0 0 0"></a-video>
       </a-entity>
       
     </a-scene>
+
+    <script>
+      const video = document.querySelector("#bear-video");
+      const targetEntity = document.querySelector('[mindar-image-target]');
+      
+      targetEntity.addEventListener("targetFound", event => {
+        video.play().catch(error => console.log("Play error:", error));
+      });
+      
+      targetEntity.addEventListener("targetLost", event => {
+        video.pause();
+      });
+    </script>
   </body>
 </html>
