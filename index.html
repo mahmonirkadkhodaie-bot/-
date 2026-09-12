@@ -10,6 +10,7 @@
     <a-scene mindar-image="imageTargetSrc: targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       
       <a-assets>
+        <!-- کلمه muted اضافه شد تا مرورگر جلوی پخش را نگیرد -->
         <video id="bear-video" src="video.mp4" loop crossorigin="anonymous" playsinline webkit-playsinline muted preload="auto"></video>
       </a-assets>
 
@@ -26,6 +27,8 @@
       const targetEntity = document.querySelector('[mindar-image-target]');
       
       targetEntity.addEventListener("targetFound", event => {
+        // برای اطمینان بیشتر، وقتی مارکر پیدا شد، دوباره دستور پخش سایلنت می‌دهیم
+        video.muted = true;
         video.play().catch(error => console.log("Play error:", error));
       });
       
